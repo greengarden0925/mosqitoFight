@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>MosquitoFight</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+</head>
+<body>
+<h1>打蚊子遊戲</h1>
+<h2>每打中一次蚊子，分數加5分，時間為10秒。</h2>
+<h3>made by:語恬</h3>
+	<div id='info'>
+		<span>Score:</span><span id="score-board"></span>
+		<span>Time:</span><span id="counter"></span>
+	</div>
+	<script type="text/javascript">
+		var score=0;
+		var countdown=10;
+
+		//設定蚊子出現，每1000毫秒換一次位置，並進行倒數計時。
+		var timer=setInterval(function(){
+			var gameOver=false;
+
+			if(document.getElementById("mosquito")===null && gameOver !== true){
+				var mosquito=document.createElement("img");
+				mosquito.src="./images/mosquito.jpg";
+				mosquito.style.position="absolute"; //設定蚊子位置為絕對位置
+				var x=Math.floor(Math.random()*window.innerWidth);  //設定隨機x位置
+				var y=Math.floor(Math.random()*window.innerHeight); //設定隨機y位置
+				
+				mosquito.style.top=y+"px";
+				mosquito.style.left=x+"px";
+				mosquito.id="mosquito";
+				document.body.appendChild(mosquito);
+			}
+			//倒數計時
+			countdown -=1;
+			document.getElementById('counter').innerHTML=countdown;
+
+			//若遊戲時間到了，則清除之前的
+			if(countdown<=0){
+				gameOver=true;
+				clearInterval(timer); //解除timer的setInterval
+				clearInterval(disappear); //解除disappear的setInterval
+				document.getElementById("counter").innerHTML='Game Over!!';
+				document.createElement
+				//出現gameover圖片
+				var gameoverimg=document.createElement("img");
+				gameoverimg.src="./images/gameover.jpg";
+				gameoverimg.style.position="absolute";
+				gameoverimg.style.top="25%";
+				gameoverimg.style.left="25%";
+				document.body.appendChild(gameoverimg);
+			}
+
+		},1000)
+        //若蚊子圖片存在，則每隔3000毫秒後將蚊子圖移除
+		var disappear=setInterval(function(){
+ 			if(document.getElementById("mosquito") !==null){
+ 				document.body.removeChild(document.getElementById("mosquito"));
+ 			}
+		},3000);
+
+		document.body.addEventListener('click',function(e){
+			var scoreBoard=document.getElementById('score-board');
+			if(e.target.id==='mosquito'){  //若點下的物件id為mosquito
+				console.log(e.target);
+				e.target.parentNode.removeChild(e.target); //若點到蚊子 則讓蚊子圖片消失
+				score+=5;
+				//alert('kill');  //出現kill字樣的提醒方塊
+				scoreBoard.innerHTML=score;  //將成績顯示在id為scoreBoard的標籤裡
+			}
+		});
+	</script>
+</body>
+</html>
